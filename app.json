@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "ReduxPlayground",
+    "scheme": "your-app-scheme",
     "slug": "ReduxPlayground",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -11,11 +12,13 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
+    },
+    "experiments": {
+      "tsconfigPaths": true,
+      "typedRoutes": true
     },
     "android": {
       "adaptiveIcon": {
