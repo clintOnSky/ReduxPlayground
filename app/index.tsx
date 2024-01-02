@@ -1,63 +1,88 @@
-import { StyleSheet, Text, View } from "react-native";
-import {
-  legacy_createStore as createStore,
-  bindActionCreators,
-  combineReducers,
-  applyMiddleware,
-} from "redux";
+import { Button, StyleSheet, Text, View } from "react-native";
+import { legacy_createStore as createStore, applyMiddleware } from "redux";
+import { thunk } from "redux-thunk";
 import { produce } from "immer";
-import { expoLogger } from "expo-redux-logger";
+import { router } from "expo-router";
+import axios from "axios";
 
 export default function Page() {
   // state
   const initialState = {
     loading: false,
-    user: [],
+    users: [],
     error: "",
   };
 
-  // action type
+  // action types
   const FETCH_USERS_REQUESTED = "FETCH_USERS_REQUESTED";
   const FETCH_USERS_SUCCEEDED = "FETCH_USERS_SUCCEEDED";
   const FETCH_USERS_FAILED = "FETCH_USERS_FAILED";
 
-  // action creator
+  // action creators
   const fetchUsersRequest = () => ({
     type: FETCH_USERS_REQUESTED,
   });
 
-  const fetchUsersSucceeded = (users) => ({
+  const fetchUsersSuccess = (users) => ({
     type: FETCH_USERS_SUCCEEDED,
     payload: users,
   });
 
-  const fetchUsersFailed = (error) => ({
+  const fetchUsersFail = (error) => ({
     type: FETCH_USERS_FAILED,
     payload: error,
   });
 
-  const reducer = produce((draft = initialState, action) => {
+  const reducer = produce((draft, action) => {
     switch (action.type) {
       case FETCH_USERS_REQUESTED:
         draft.loading = true;
+        draft.error = "";
         break;
       case FETCH_USERS_SUCCEEDED:
         draft.loading = false;
-        draft.data = action.payload;
+        draft.users = action.payload;
         break;
+
       case FETCH_USERS_FAILED:
         draft.loading = false;
         draft.error = action.payload;
         break;
-    }
-  });
 
-  const store = createStore(reducer);
+      default:
+        return draft;
+    }
+  }, initialState);
+
+  const store = createStore(reducer, applyMiddleware(thunk));
+
+  const fetchUsers = () => {
+    return function (dispatch) {
+      dispatch(fetchUsersRequest());
+      axios
+        .get("https://jsonplaceholder.typicode.com/users")
+        .then((response) => {
+          const users = response.data.map((user) => user.id);
+          dispatch(fetchUsersSuccess(users));
+        })
+        .catch((error) => {
+          console.log(error.message);
+          dispatch(fetchUsersFail(error.message));
+        });
+    };
+  };
+
+  const unsubscribe = store.subscribe(() => console.log(store.getState()));
+  store.dispatch(fetchUsers());
+  // unsubscribe();
 
   return (
     <View style={styles.container}>
       <View style={styles.main}>
-        <Text style={styles.title}></Text>
+        <Button
+          title="Go to Cake Shop"
+          onPress={() => router.push("/cakeIcecream")}
+        />
       </View>
     </View>
   );

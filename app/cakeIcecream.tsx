@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, View } from "react-native";
 import {
   legacy_createStore as createStore,
   bindActionCreators,
@@ -7,6 +7,7 @@ import {
 } from "redux";
 import { produce } from "immer";
 import { expoLogger } from "expo-redux-logger";
+import { router } from "expo-router";
 
 // the type property of the action object is usually defined as a string constant to prevent misspelling
 // Cake action types
@@ -116,54 +117,28 @@ const actions = bindActionCreators(
   store.dispatch
 );
 
-const unsubscribe = store.subscribe(() => {});
+// const unsubscribe = store.subscribe(() => {});
 
-// action creators are called directly using the bindActionCreator function
-actions.orderCake();
-actions.restockCake(10);
-actions.orderIceCream();
-actions.orderIceCream();
+// // action creators are called directly using the bindActionCreator function
+// actions.orderCake();
+// actions.restockCake(10);
+// actions.orderIceCream();
+// actions.orderIceCream();
 
-// calling the return function of the subscriber ends the listener
-// unsubscribe();
+// // calling the return function of the subscriber ends the listener
+// // unsubscribe();
 
-// state changes after the unsubscribe function will not show
-actions.orderCake();
+// // state changes after the unsubscribe function will not show
+// actions.orderCake();
 
-// store.dispatch(orderCake());/
-
-const initialState = {
-  name: "Clinton",
-  address: {
-    street: "30 Edosa Str",
-    city: "Benin",
-    state: "ED",
-  },
-};
-
-const UPDATE_STREET = "UPDATE_STREET";
-
-const updateStreet = (street: string) => ({
-  type: UPDATE_STREET,
-  payload: street,
-});
-
-const reducer = produce((draft = initialState, action) => {
-  switch (action.type) {
-    case UPDATE_STREET:
-      draft.address.street = action.payload;
-      break;
-    default: {
-      return draft;
-    }
-  }
-});
+// // store.dispatch(orderCake());/
 
 export default function Page() {
   return (
     <View style={styles.container}>
       <View style={styles.main}>
         <Text style={styles.title}>{store.getState().cake.numOfCakes}</Text>
+        <Button title="Go to Index" onPress={() => router.replace("/")} />
       </View>
     </View>
   );
