@@ -17,5 +17,6 @@ const cakeSlice = createSlice({
   },
 });
 
-export const cakeReducer = cakeSlice.reducer;
+const cakeReducer = cakeSlice.reducer;
+export default cakeReducer;
 export const cakeActions = cakeSlice.actions;
