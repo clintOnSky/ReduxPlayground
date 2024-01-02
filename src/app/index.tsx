@@ -4,6 +4,7 @@ import { thunk } from "redux-thunk";
 import { produce } from "immer";
 import { router } from "expo-router";
 import axios from "axios";
+import { expoLogger } from "expo-redux-logger";
 
 export default function Page() {
   // state
@@ -54,7 +55,7 @@ export default function Page() {
     }
   }, initialState);
 
-  const store = createStore(reducer, applyMiddleware(thunk));
+  const store = createStore(reducer, applyMiddleware(thunk, expoLogger));
 
   const fetchUsers = () => {
     return function (dispatch) {
@@ -72,7 +73,7 @@ export default function Page() {
     };
   };
 
-  const unsubscribe = store.subscribe(() => console.log(store.getState()));
+  // const unsubscribe = store.subscribe(() => console.log(store.getState()));
   store.dispatch(fetchUsers());
   // unsubscribe();
 
