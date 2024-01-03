@@ -11,12 +11,6 @@ export default function Page() {
   //   console.log("Updated state", store.getState())
   // );
   store.dispatch(cakeActions.ordered());
-  store.dispatch(iceCreamAction.ordered());
-  store.dispatch(iceCreamAction.ordered());
-  store.dispatch(iceCreamAction.ordered());
-  store.dispatch(cakeActions.restocked(2));
-  store.dispatch(iceCreamAction.restocked(3));
-
   // unsubscribe();
   return (
     <View style={styles.container}>

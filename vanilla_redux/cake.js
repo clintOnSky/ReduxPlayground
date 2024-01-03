@@ -1,12 +1,11 @@
 // the type property of the action object is usually defined as a string constant to prevent misspelling
 
-import { expoLogger } from "expo-redux-logger";
-import {
+const {
   applyMiddleware,
   bindActionCreators,
   combineReducers,
-  legacy_createStore as createStore,
-} from "redux";
+  legacy_createStore: createStore,
+} = require("redux");
 
 // Cake action types
 const CAKE_ORDERED = "CAKE_ORDERED";
@@ -94,7 +93,7 @@ const iceCreamReducer = (state = initialIceCreamState, action) => {
     case CAKE_ORDERED:
       return {
         ...state,
-        numOfIceCream: state.numOfIceCreams--,
+        numOfIceCreams: state.numOfIceCreams - action.payload,
       };
     default:
       return state;
